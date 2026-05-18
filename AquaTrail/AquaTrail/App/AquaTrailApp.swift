@@ -9,9 +9,25 @@ import SwiftUI
 
 @main
 struct AquaTrailApp: App {
+    @State private var authVM = AuthViewModel()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Group {
+                if authVM.isLoading {
+                    ZStack {
+                        Color.navyDeep.ignoresSafeArea()
+                        ProgressView()
+                            .tint(.white)
+                    }
+                } else {
+                    ContentView()
+                        .environment(authVM)
+                }
+            }
+            .task {
+                await authVM.checkSession()
+            }
         }
     }
 }

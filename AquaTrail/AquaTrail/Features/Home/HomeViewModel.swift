@@ -13,6 +13,7 @@ class HomeViewModel {
     private(set) var cityPhotoURL: URL?
     private(set) var weather: WeatherData?
     private(set) var diveSpots: [DiveSpot] = []
+    var avatarURL: URL?
 
     let location = LocationManager()
 
@@ -45,5 +46,15 @@ class HomeViewModel {
 
     func loadDiveSpots() async {
         diveSpots = (try? await DiveSpotService.fetchAll()) ?? []
+    }
+
+    func loadAvatar() async {
+        guard let userId = try? await supabase.auth.session.user.id,
+              let profile = try? await ProfileService.fetch(userId: userId),
+              let urlString = profile.avatarUrl else {
+            avatarURL = nil
+            return
+        }
+        avatarURL = URL(string: urlString)
     }
 }

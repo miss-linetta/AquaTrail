@@ -6,7 +6,10 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(AuthViewModel.self) private var authVM
     @State private var vm = HomeViewModel()
+    @State private var showAuth = false
+    @State private var showProfile = false
 
     var body: some View {
         NavigationStack {
@@ -16,7 +19,9 @@ struct HomeView: View {
                     VStack(spacing: 0) {
                         locationPanel
                         VStack(spacing: 16) {
-                            heroBanner
+                            if !authVM.isAuthenticated {
+                                heroBanner
+                            }
                             destinationsSection
                         }
                         .padding(.top, 16)
@@ -30,6 +35,12 @@ struct HomeView: View {
             .task {
                 vm.start()
                 await vm.loadDiveSpots()
+                await vm.loadAvatar()
+            }
+            .onAppear {
+                if authVM.isAuthenticated {
+                    Task { await vm.loadAvatar() }
+                }
             }
             .onChange(of: vm.location.cityName) { _, city in
                 vm.cityDidChange(city)
@@ -38,6 +49,34 @@ struct HomeView: View {
                 vm.locationDidChange(location)
             }
             .toolbarVisibility(.hidden, for: .navigationBar)
+            .fullScreenCover(isPresented: $showAuth) {
+                NavigationStack {
+                    AuthView(vm: authVM)
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button { showAuth = false } label: {
+                                    Image(systemName: "xmark")
+                                        .foregroundStyle(.white)
+                                }
+                            }
+                        }
+                }
+            }
+            .fullScreenCover(isPresented: $showProfile) {
+                NavigationStack {
+                    ProfileView()
+                        .environment(authVM)
+                }
+            }
+            .onChange(of: authVM.isAuthenticated) { _, isAuth in
+                if isAuth {
+                    showAuth = false
+                    Task { await vm.loadAvatar() }
+                } else {
+                    showProfile = false
+                    vm.avatarURL = nil
+                }
+            }
         }
     }
 
@@ -56,13 +95,36 @@ struct HomeView: View {
 
             Spacer()
 
-            Button { } label: {
-                Image(systemName: "person.fill")
-                    .font(.body)
-                    .foregroundStyle(.white)
-                    .frame(width: 44, height: 44)
-                    .background(Color.oceanBlue)
-                    .clipShape(Circle())
+            if authVM.isAuthenticated {
+                Button { showProfile = true } label: {
+                    if let avatarURL = vm.avatarURL {
+                        AsyncImage(url: avatarURL) { image in
+                            image.resizable().scaledToFill()
+                        } placeholder: {
+                            Image(systemName: "person.fill.checkmark")
+                                .font(.body)
+                                .foregroundStyle(.white)
+                        }
+                        .frame(width: 44, height: 44)
+                        .clipShape(Circle())
+                    } else {
+                        Image(systemName: "person.fill.checkmark")
+                            .font(.body)
+                            .foregroundStyle(.white)
+                            .frame(width: 44, height: 44)
+                            .background(Color.deepTeal)
+                            .clipShape(Circle())
+                    }
+                }
+            } else {
+                Button { showAuth = true } label: {
+                    Image(systemName: "person.fill")
+                        .font(.body)
+                        .foregroundStyle(.white)
+                        .frame(width: 44, height: 44)
+                        .background(Color.oceanBlue)
+                        .clipShape(Circle())
+                }
             }
         }
         .padding(.horizontal, 16)
@@ -157,7 +219,7 @@ struct HomeView: View {
                 .padding(20)
             }
 
-            Button { } label: {
+            Button { showAuth = true } label: {
                 HStack(spacing: 8) {
                     Text("Зареєструватись")
                         .fontWeight(.semibold)
