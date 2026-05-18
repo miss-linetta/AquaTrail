@@ -9,32 +9,35 @@ struct HomeView: View {
     @State private var vm = HomeViewModel()
 
     var body: some View {
-        VStack(spacing: 0) {
-            header
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 0) {
-                    locationPanel
-                    VStack(spacing: 16) {
-                        heroBanner
-                        destinationsSection
+        NavigationStack {
+            VStack(spacing: 0) {
+                header
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        locationPanel
+                        VStack(spacing: 16) {
+                            heroBanner
+                            destinationsSection
+                        }
+                        .padding(.top, 16)
+                        .padding(.bottom, 90)
+                        .frame(maxWidth: .infinity, alignment: .top)
+                        .background(Color.navyDeep)
                     }
-                    .padding(.top, 16)
-                    .padding(.bottom, 90)
-                    .frame(maxWidth: .infinity, alignment: .top)
-                    .background(Color.navyDeep)
                 }
             }
-        }
-        .ignoresSafeArea(edges: .bottom)
-        .task {
-            vm.start()
-            await vm.loadDiveSpots()
-        }
-        .onChange(of: vm.location.cityName) { _, city in
-            vm.cityDidChange(city)
-        }
-        .onChange(of: vm.location.userLocation) { _, location in
-            vm.locationDidChange(location)
+            .ignoresSafeArea(edges: .bottom)
+            .task {
+                vm.start()
+                await vm.loadDiveSpots()
+            }
+            .onChange(of: vm.location.cityName) { _, city in
+                vm.cityDidChange(city)
+            }
+            .onChange(of: vm.location.userLocation) { _, location in
+                vm.locationDidChange(location)
+            }
+            .toolbarVisibility(.hidden, for: .navigationBar)
         }
     }
 
@@ -185,16 +188,23 @@ struct HomeView: View {
                     .fontWeight(.bold)
                     .foregroundStyle(.white)
                 Spacer()
-                Button("Всі місця") { }
-                    .font(.subheadline)
-                    .foregroundStyle(Color.skyLight)
+                NavigationLink("Всі місця") {
+                    AllSpotsView(spots: vm.diveSpots, userLocation: vm.location.userLocation)
+                }
+                .font(.subheadline)
+                .foregroundStyle(Color.skyLight)
             }
             .padding(.horizontal, 16)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(vm.sortedSpots) { spot in
-                        destinationCard(spot)
+                        NavigationLink {
+                            DiveSpotDetailView(spot: spot, userLocation: vm.location.userLocation)
+                        } label: {
+                            destinationCard(spot)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 .padding(.horizontal, 16)
