@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import CoreLocation
 import Observation
 
 @Observable
@@ -21,10 +22,25 @@ class DiveLogFormViewModel {
     var rating: Int = 0
     var notes = ""
     var buddyName = ""
+    var latitude: Double?
+    var longitude: Double?
 
     var isSaving = false
     var errorMessage: String?
     var savedSuccessfully = false
+
+    // Spot search
+    var allSpots: [DiveSpot] = []
+    var showSuggestions = false
+
+    var filteredSpots: [DiveSpot] {
+        guard !spotName.isEmpty else { return [] }
+        let query = spotName.lowercased()
+        return allSpots.filter {
+            $0.name.lowercased().contains(query) ||
+            ($0.nameEn?.lowercased().contains(query) ?? false)
+        }
+    }
 
     private var editingLogId: UUID?
 
@@ -34,6 +50,25 @@ class DiveLogFormViewModel {
     let difficultyLabels = ["Початковий", "Середній", "Просунутий", "Експертний"]
     let entryTypes = ["shore", "boat"]
     let entryTypeLabels = ["Берег", "Човен"]
+
+    func loadSpots() async {
+        allSpots = (try? await DiveSpotService.fetchAll()) ?? []
+    }
+
+    func selectSpot(_ spot: DiveSpot) {
+        spotName = spot.name
+        diveSpotId = spot.id
+        latitude = spot.latitude
+        longitude = spot.longitude
+        if let d = spot.maxDepth { depthText = "\(d)" }
+        difficulty = spot.difficulty ?? ""
+        entryType = spot.entryType ?? ""
+        showSuggestions = false
+    }
+
+    func clearSpotSelection() {
+        diveSpotId = nil
+    }
 
     func loadForEdit(_ log: DiveLog) {
         editingLogId = log.id
@@ -49,11 +84,19 @@ class DiveLogFormViewModel {
         rating = log.rating ?? 0
         notes = log.notes ?? ""
         buddyName = log.buddyName ?? ""
+        // Load coordinates from linked spot if available
+        if let spotId = log.diveSpotId,
+           let spot = allSpots.first(where: { $0.id == spotId }) {
+            latitude = spot.latitude
+            longitude = spot.longitude
+        }
     }
 
     func loadFromSpot(_ spot: DiveSpot) {
         spotName = spot.name
         diveSpotId = spot.id
+        latitude = spot.latitude
+        longitude = spot.longitude
         if let d = spot.maxDepth { depthText = "\(d)" }
         difficulty = spot.difficulty ?? ""
         entryType = spot.entryType ?? ""
