@@ -13,7 +13,7 @@ struct ContentView: View {
             HomeView()
                 .tabItem { Label("Головна", systemImage: "house.fill") }
 
-            Text("Щоденник")
+            DiveLogListView()
                 .tabItem { Label("Щоденник", systemImage: "book.fill") }
 
             Text("Планування")

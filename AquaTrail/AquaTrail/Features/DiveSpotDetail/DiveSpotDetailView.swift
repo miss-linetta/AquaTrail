@@ -87,9 +87,29 @@ struct DiveSpotDetailView: View {
             conditionsSection
             requirementsSection
             mapSection
+            logDiveButton
         }
         .padding(16)
         .padding(.bottom, 40)
+    }
+
+    // MARK: – Log dive
+
+    private var logDiveButton: some View {
+        NavigationLink {
+            DiveLogFormView(prefillSpot: spot)
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "pencil.and.list.clipboard")
+                Text("Записати занурення")
+                    .fontWeight(.semibold)
+            }
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .background(Color.oceanBlue)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+        }
     }
 
     // MARK: – Quick info
