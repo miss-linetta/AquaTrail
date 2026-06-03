@@ -43,7 +43,7 @@ struct AuthView: View {
                 .fontWeight(.heavy)
                 .foregroundStyle(.white)
 
-            Text(isSignUp ? "Створи акаунт" : "Увійти в акаунт")
+            Text(isSignUp ? "Create account" : "Sign into account")
                 .font(.subheadline)
                 .foregroundStyle(.white.opacity(0.7))
         }
@@ -59,11 +59,11 @@ struct AuthView: View {
                 .keyboardType(.emailAddress)
                 .textContentType(.emailAddress)
 
-            field(icon: "lock.fill", placeholder: "Пароль", text: $password, isSecure: true)
+            field(icon: "lock.fill", placeholder: "Password", text: $password, isSecure: true)
                 .textContentType(isSignUp ? .newPassword : .password)
 
             if isSignUp {
-                field(icon: "lock.fill", placeholder: "Підтвердити пароль", text: $confirmPassword, isSecure: true)
+                field(icon: "lock.fill", placeholder: "Confirm password", text: $confirmPassword, isSecure: true)
                     .textContentType(.newPassword)
             }
         }
@@ -126,7 +126,7 @@ struct AuthView: View {
                     ProgressView()
                         .tint(Color.navyDeep)
                 }
-                Text(isSignUp ? "Зареєструватись" : "Увійти")
+                Text(isSignUp ? "Register" : "Sign in")
                     .fontWeight(.semibold)
             }
             .foregroundStyle(Color.navyDeep)
@@ -160,9 +160,9 @@ struct AuthView: View {
             }
         } label: {
             HStack(spacing: 4) {
-                Text(isSignUp ? "Вже є акаунт?" : "Немає акаунту?")
+                Text(isSignUp ? "Already have an account?" : "Don't have an account?")
                     .foregroundStyle(.white.opacity(0.6))
-                Text(isSignUp ? "Увійти" : "Зареєструватись")
+                Text(isSignUp ? "Sign in" : "Register")
                     .foregroundStyle(Color.skyLight)
                     .fontWeight(.semibold)
             }

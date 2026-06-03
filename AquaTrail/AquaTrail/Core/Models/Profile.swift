@@ -11,6 +11,7 @@ struct Profile: Codable {
     var certification: String?
     var totalDives: Int?
     var avatarUrl: String?
+    var interests: [String]?
     var createdAt: Date?
 
     enum CodingKeys: String, CodingKey {
@@ -19,6 +20,7 @@ struct Profile: Codable {
         case certification
         case totalDives = "total_dives"
         case avatarUrl = "avatar_url"
+        case interests
         case createdAt = "created_at"
     }
 }

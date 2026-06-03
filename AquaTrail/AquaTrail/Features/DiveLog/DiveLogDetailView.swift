@@ -7,6 +7,7 @@ import SwiftUI
 
 struct DiveLogDetailView: View {
     let log: DiveLog
+    var displaySpotName: String?
     @State private var showEdit = false
     @Environment(\.dismiss) private var dismiss
 
@@ -15,7 +16,7 @@ struct DiveLogDetailView: View {
             VStack(spacing: 20) {
                 // Header card
                 VStack(spacing: 8) {
-                    Text(log.spotName)
+                    Text(displaySpotName ?? log.spotName)
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundStyle(.white)
@@ -42,15 +43,15 @@ struct DiveLogDetailView: View {
 
                 // Main stats
                 HStack(spacing: 12) {
-                    statCard(icon: "arrow.down.to.line", title: "Глибина", value: "\(log.depth) м")
-                    statCard(icon: "clock.fill", title: "Час", value: "\(log.duration) хв")
+                    statCard(icon: "arrow.down.to.line", title: "Depth", value: "\(log.depth) m")
+                    statCard(icon: "clock.fill", title: "Time", value: "\(log.duration) min")
                 }
 
                 // Conditions
                 let conditions = buildConditions()
                 if !conditions.isEmpty {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Умови")
+                        Text("Conditions")
                             .font(.headline)
                             .foregroundStyle(.white)
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
@@ -63,17 +64,17 @@ struct DiveLogDetailView: View {
 
                 // Difficulty
                 if let difficulty = log.difficulty {
-                    infoRow(icon: "gauge.medium", title: "Складність", value: difficultyLabel(difficulty))
+                    infoRow(icon: "gauge.medium", title: "Difficulty", value: difficultyLabel(difficulty))
                 }
 
                 // Entry type
                 if let entry = log.entryType {
-                    infoRow(icon: "figure.water.fitness", title: "Тип входу", value: entryLabel(entry))
+                    infoRow(icon: "figure.water.fitness", title: "Entry type", value: entryLabel(entry))
                 }
 
                 // Buddy
                 if let buddy = log.buddyName, !buddy.isEmpty {
-                    infoRow(icon: "person.2.fill", title: "Бадді", value: buddy)
+                    infoRow(icon: "person.2.fill", title: "Buddy", value: buddy)
                 }
 
                 // Notes
@@ -82,7 +83,7 @@ struct DiveLogDetailView: View {
                         HStack(spacing: 6) {
                             Image(systemName: "note.text")
                                 .foregroundStyle(Color.skyLight)
-                            Text("Нотатки")
+                            Text("Notes")
                                 .font(.headline)
                                 .foregroundStyle(.white)
                         }
@@ -100,12 +101,12 @@ struct DiveLogDetailView: View {
             .padding(.bottom, 40)
         }
         .background(Color.navyDeep)
-        .navigationTitle("Деталі")
+        .navigationTitle("Details")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button("Редагувати") { showEdit = true }
+                Button("Edit") { showEdit = true }
                     .foregroundStyle(Color.skyLight)
             }
         }
@@ -162,28 +163,28 @@ struct DiveLogDetailView: View {
     private func buildConditions() -> [ConditionItem] {
         var items: [ConditionItem] = []
         if let temp = log.waterTemp {
-            items.append(ConditionItem(icon: "thermometer.medium", title: "Темп. води", value: "\(temp)°C"))
+            items.append(ConditionItem(icon: "thermometer.medium", title: "Water temp.", value: "\(temp)°C"))
         }
         if let vis = log.visibility {
-            items.append(ConditionItem(icon: "eye.fill", title: "Видимість", value: "\(vis) м"))
+            items.append(ConditionItem(icon: "eye.fill", title: "Visibility", value: "\(vis) m"))
         }
         return items
     }
 
     private func difficultyLabel(_ d: String) -> String {
         switch d {
-        case "beginner": return "Початковий"
-        case "intermediate": return "Середній"
-        case "advanced": return "Просунутий"
-        case "expert": return "Експертний"
+        case "beginner": return "Beginner"
+        case "intermediate": return "Intermediate"
+        case "advanced": return "Advanced"
+        case "expert": return "Expert"
         default: return d
         }
     }
 
     private func entryLabel(_ e: String) -> String {
         switch e {
-        case "shore": return "Берег"
-        case "boat": return "Човен"
+        case "shore": return "Shore"
+        case "boat": return "Boat"
         default: return e
         }
     }

@@ -24,6 +24,18 @@ class ProfileViewModel {
     var displayName = ""
     var certification = ""
     var totalDives = ""
+    var selectedInterests: Set<String> = []
+
+    static let allInterests = [
+        "fauna", "flora", "wrecks", "caves", "reef",
+        "photography", "night", "drift", "deep", "training"
+    ]
+    static let interestLabels: [String: String] = [
+        "fauna": String(localized: "Fauna"), "flora": String(localized: "Flora"), "wrecks": String(localized: "Wrecks"),
+        "caves": String(localized: "Caves"), "reef": String(localized: "Reef"), "photography": String(localized: "Photo"),
+        "night": String(localized: "Night"), "drift": String(localized: "Drift"), "deep": String(localized: "Deep"),
+        "training": String(localized: "Training")
+    ]
 
     func load() async {
         isLoading = true
@@ -41,9 +53,10 @@ class ProfileViewModel {
             displayName = profile?.displayName ?? ""
             certification = profile?.certification ?? ""
             totalDives = profile?.totalDives.map { "\($0)" } ?? ""
+            selectedInterests = Set(profile?.interests ?? [])
             await loadAvatarImage()
         } catch {
-            errorMessage = "Не вдалось завантажити профіль: \(error.localizedDescription)"
+            errorMessage = String(localized: "Failed to load profile: \(error.localizedDescription)")
         }
     }
 
@@ -56,11 +69,12 @@ class ProfileViewModel {
             profile.displayName = displayName.isEmpty ? nil : displayName
             profile.certification = certification.isEmpty ? nil : certification
             profile.totalDives = Int(totalDives)
+            profile.interests = selectedInterests.isEmpty ? nil : Array(selectedInterests)
             try await ProfileService.update(profile)
             self.profile = profile
             savedSuccessfully = true
         } catch {
-            errorMessage = "Не вдалось зберегти: \(error.localizedDescription)"
+            errorMessage = String(localized: "Failed to save: \(error.localizedDescription)")
         }
     }
 
@@ -78,7 +92,7 @@ class ProfileViewModel {
 
     func uploadAvatar(data: Data) async {
         guard let uiImage = UIImage(data: data) else {
-            errorMessage = "Не вдалось прочитати зображення"
+            errorMessage = String(localized: "Failed to read image")
             return
         }
         await uploadAvatar(uiImage: uiImage)
@@ -113,7 +127,7 @@ class ProfileViewModel {
 
             avatarImage = preview
         } catch {
-            errorMessage = "Не вдалось завантажити фото: \(error.localizedDescription)"
+            errorMessage = String(localized: "Failed to upload photo: \(error.localizedDescription)")
         }
     }
 
@@ -136,7 +150,7 @@ class ProfileViewModel {
 
             avatarImage = nil
         } catch {
-            errorMessage = "Не вдалось видалити фото: \(error.localizedDescription)"
+            errorMessage = String(localized: "Failed to delete photo: \(error.localizedDescription)")
         }
     }
 

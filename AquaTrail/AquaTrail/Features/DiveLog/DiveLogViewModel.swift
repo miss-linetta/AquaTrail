@@ -12,6 +12,7 @@ class DiveLogViewModel {
     var logs: [DiveLog] = []
     var isLoading = false
     var errorMessage: String?
+    private var spots: [DiveSpot] = []
 
     // Stats for recommendation engine
     var totalDives: Int { logs.count }
@@ -28,14 +29,23 @@ class DiveLogViewModel {
         logs.map(\.duration).reduce(0, +)
     }
 
+    func localizedSpotName(for log: DiveLog) -> String {
+        if let spotId = log.diveSpotId,
+           let spot = spots.first(where: { $0.id == spotId }) {
+            return spot.localizedName
+        }
+        return log.spotName
+    }
+
     func load() async {
         guard let userId = try? await supabase.auth.session.user.id else { return }
         isLoading = true
         defer { isLoading = false }
         do {
             logs = try await DiveLogService.fetchAll(userId: userId)
+            spots = (try? await DiveSpotService.fetchAll()) ?? []
         } catch {
-            errorMessage = "Не вдалось завантажити записи"
+            errorMessage = String(localized: "Failed to load records")
         }
     }
 
@@ -44,7 +54,7 @@ class DiveLogViewModel {
             try await DiveLogService.delete(id: log.id)
             logs.removeAll { $0.id == log.id }
         } catch {
-            errorMessage = "Не вдалось видалити запис"
+            errorMessage = String(localized: "Failed to delete record")
         }
     }
 }

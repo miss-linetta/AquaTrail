@@ -155,7 +155,7 @@ struct HomeView: View {
             )
 
             VStack(spacing: 4) {
-                Text("Моя локація")
+                Text("My location")
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.8))
 
@@ -207,11 +207,11 @@ struct HomeView: View {
                     .padding(.bottom, 50)
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("ПРИЄДНУЙСЯ")
+                    Text("JOIN US")
                         .font(.system(size: 26, weight: .heavy))
                         .foregroundStyle(.white)
 
-                    Text("Створи акаунт щоб вести щоденник занурень, збирати колекцію видів, керувати спорядженням та отримувати персональні рекомендації маршрутів.")
+                    Text("Create an account to keep a dive log, collect species, manage equipment and get personalized route recommendations.")
                         .font(.subheadline)
                         .foregroundStyle(.white.opacity(0.85))
                         .fixedSize(horizontal: false, vertical: true)
@@ -221,7 +221,7 @@ struct HomeView: View {
 
             Button { showAuth = true } label: {
                 HStack(spacing: 8) {
-                    Text("Зареєструватись")
+                    Text("Register")
                         .fontWeight(.semibold)
                     Image(systemName: "chevron.right")
                 }
@@ -245,12 +245,12 @@ struct HomeView: View {
     private var destinationsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Місця поруч")
+                Text("Nearby spots")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundStyle(.white)
                 Spacer()
-                NavigationLink("Всі місця") {
+                NavigationLink("All spots") {
                     AllSpotsView(spots: vm.diveSpots, userLocation: vm.location.userLocation)
                 }
                 .font(.subheadline)
@@ -298,7 +298,7 @@ struct HomeView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 if let km = spot.distanceKm(from: vm.location.userLocation) {
-                    Text("Відстань")
+                    Text("Distance")
                         .font(.subheadline)
                         .foregroundStyle(.white.opacity(0.85))
                     Text("\(km) km")
@@ -306,7 +306,7 @@ struct HomeView: View {
                         .foregroundStyle(.white)
                 }
                 Spacer()
-                Text(spot.name)
+                Text(spot.localizedName)
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundStyle(.white)

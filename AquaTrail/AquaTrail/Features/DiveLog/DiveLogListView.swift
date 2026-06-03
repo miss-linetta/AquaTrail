@@ -26,7 +26,7 @@ struct DiveLogListView: View {
                 }
             }
             .background(Color.navyDeep)
-            .navigationTitle("Щоденник")
+            .navigationTitle("Dive Log")
             .navigationBarTitleDisplayMode(.large)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
@@ -81,13 +81,13 @@ struct DiveLogListView: View {
                 .font(.system(size: 48))
                 .foregroundStyle(Color.skyLight.opacity(0.5))
 
-            Text("Увійдіть щоб вести щоденник занурень")
+            Text("Sign in to keep a dive log")
                 .font(.headline)
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
 
             Button { showAuth = true } label: {
-                Text("Увійти")
+                Text("Sign in")
                     .fontWeight(.semibold)
                     .foregroundStyle(Color.navyDeep)
                     .padding(.horizontal, 32)
@@ -107,11 +107,11 @@ struct DiveLogListView: View {
                 .font(.system(size: 48))
                 .foregroundStyle(Color.skyLight.opacity(0.5))
 
-            Text("Ще немає записів")
+            Text("No records yet")
                 .font(.headline)
                 .foregroundStyle(.white)
 
-            Text("Додайте ваше перше занурення")
+            Text("Add your first dive")
                 .font(.subheadline)
                 .foregroundStyle(.white.opacity(0.6))
 
@@ -120,7 +120,7 @@ struct DiveLogListView: View {
             } label: {
                 HStack(spacing: 8) {
                     Image(systemName: "plus")
-                    Text("Додати занурення")
+                    Text("Add dive")
                 }
                 .fontWeight(.semibold)
                 .foregroundStyle(Color.navyDeep)
@@ -137,15 +137,15 @@ struct DiveLogListView: View {
 
     private var statsHeader: some View {
         HStack(spacing: 0) {
-            statItem(value: "\(vm.totalDives)", label: "Занурень")
+            statItem(value: "\(vm.totalDives)", label: "Dives")
             statItem(
                 value: vm.averageDepth.map { "\(Int($0.rounded()))" } ?? "—",
-                label: "Сер. глибина"
+                label: "Avg. depth"
             )
-            statItem(value: "\(vm.totalBottomTime)", label: "Хвилин")
+            statItem(value: "\(vm.totalBottomTime)", label: "Minutes")
             statItem(
                 value: vm.averageRating.map { String(format: "%.1f", $0) } ?? "—",
-                label: "Сер. оцінка"
+                label: "Avg. rating"
             )
         }
         .padding(12)
@@ -176,7 +176,7 @@ struct DiveLogListView: View {
 
                 ForEach(vm.logs) { log in
                     NavigationLink {
-                        DiveLogDetailView(log: log)
+                        DiveLogDetailView(log: log, displaySpotName: vm.localizedSpotName(for: log))
                     } label: {
                         logRow(log)
                     }
@@ -185,7 +185,7 @@ struct DiveLogListView: View {
                         Button(role: .destructive) {
                             Task { await vm.delete(log) }
                         } label: {
-                            Label("Видалити", systemImage: "trash")
+                            Label("Delete", systemImage: "trash")
                         }
                     }
                 }
@@ -208,7 +208,7 @@ struct DiveLogListView: View {
 
             // Info
             VStack(alignment: .leading, spacing: 4) {
-                Text(log.spotName)
+                Text(vm.localizedSpotName(for: log))
                     .font(.headline)
                     .foregroundStyle(.white)
                     .lineLimit(1)
@@ -234,11 +234,11 @@ struct DiveLogListView: View {
 
             // Stats
             VStack(alignment: .trailing, spacing: 4) {
-                Text("\(log.depth) м")
+                Text("\(log.depth) m")
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .foregroundStyle(.white)
-                Text("\(log.duration) хв")
+                Text("\(log.duration) min")
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.6))
             }

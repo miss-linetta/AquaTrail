@@ -58,7 +58,7 @@ struct DiveSpotDetailView: View {
             )
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(spot.name)
+                Text(spot.localizedName)
                     .font(.system(size: 28, weight: .bold))
                     .foregroundStyle(.white)
 
@@ -66,7 +66,7 @@ struct DiveSpotDetailView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "location.fill")
                             .font(.caption)
-                        Text("\(km) км від вас")
+                        Text("\(km) km from you")
                     }
                     .font(.subheadline)
                     .foregroundStyle(.white.opacity(0.8))
@@ -81,7 +81,7 @@ struct DiveSpotDetailView: View {
     private var content: some View {
         VStack(spacing: 20) {
             quickInfoGrid
-            if let description = spot.description, !description.isEmpty {
+            if let description = spot.localizedDescription, !description.isEmpty {
                 descriptionSection(description)
             }
             conditionsSection
@@ -101,7 +101,7 @@ struct DiveSpotDetailView: View {
         } label: {
             HStack(spacing: 8) {
                 Image(systemName: "pencil.and.list.clipboard")
-                Text("Записати занурення")
+                Text("Log dive")
                     .fontWeight(.semibold)
             }
             .foregroundStyle(.white)
@@ -117,16 +117,16 @@ struct DiveSpotDetailView: View {
     private var quickInfoGrid: some View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
             if let depth = spot.maxDepth {
-                infoCard(icon: "arrow.down.to.line", title: "Макс. глибина", value: "\(depth) м")
+                infoCard(icon: "arrow.down.to.line", title: "Max. depth", value: "\(depth) m")
             }
             if let difficulty = spot.difficulty {
-                infoCard(icon: "gauge.medium", title: "Складність", value: difficulty)
+                infoCard(icon: "gauge.medium", title: "Difficulty", value: difficulty)
             }
             if let entry = spot.entryType {
-                infoCard(icon: "figure.walk", title: "Вхід", value: entry)
+                infoCard(icon: "figure.walk", title: "Entry", value: entry)
             }
             if let season = spot.bestSeason {
-                infoCard(icon: "calendar", title: "Найкращий сезон", value: season)
+                infoCard(icon: "calendar", title: "Best season", value: season)
             }
         }
     }
@@ -158,7 +158,7 @@ struct DiveSpotDetailView: View {
 
     private func descriptionSection(_ text: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            sectionTitle("Опис")
+            sectionTitle("Description")
             Text(text)
                 .font(.subheadline)
                 .foregroundStyle(.white.opacity(0.85))
@@ -171,17 +171,17 @@ struct DiveSpotDetailView: View {
 
     private var conditionsSection: some View {
         let rows: [(String, String, String)] = [
-            spot.visibilitySummerM.map { ("eye.fill", "Видимість (літо)", "\($0) м") },
-            spot.visibilityWinterM.map { ("eye.fill", "Видимість (зима)", "\($0) м") },
-            spot.waterTempSurfaceC.map { ("thermometer.medium", "Темп. поверхні", "\($0)°C") },
-            spot.waterTempBottomC.map { ("thermometer.snowflake", "Темп. на дні", "\($0)°C") },
-            spot.thermoclineDepthM.map { ("water.waves", "Термоклін", "\($0) м") },
+            spot.visibilitySummerM.map { ("eye.fill", "Visibility (summer)", "\($0) m") },
+            spot.visibilityWinterM.map { ("eye.fill", "Visibility (winter)", "\($0) m") },
+            spot.waterTempSurfaceC.map { ("thermometer.medium", "Surface temp.", "\($0)°C") },
+            spot.waterTempBottomC.map { ("thermometer.snowflake", "Bottom temp.", "\($0)°C") },
+            spot.thermoclineDepthM.map { ("water.waves", "Thermocline", "\($0) m") },
         ].compactMap { $0 }
 
         return Group {
             if !rows.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    sectionTitle("Умови")
+                    sectionTitle("Conditions")
                     VStack(spacing: 0) {
                         ForEach(Array(rows.enumerated()), id: \.offset) { index, row in
                             conditionRow(icon: row.0, title: row.1, value: row.2)
@@ -220,17 +220,17 @@ struct DiveSpotDetailView: View {
 
     private var requirementsSection: some View {
         let rows: [(String, String, String)] = [
-            spot.minCertification.map { ("checkmark.seal.fill", "Мін. сертифікація", $0) },
-            spot.minDives.map { ("number", "Мін. занурень", "\($0)") },
-            spot.drysuitRecommended == true ? ("suit.fill", "Сухий костюм", "Рекомендовано") : nil,
-            spot.access.map { ("road.lanes", "Доступ", $0) },
-            spot.infrastructure.map { ("building.2.fill", "Інфраструктура", $0) },
+            spot.minCertification.map { ("checkmark.seal.fill", "Min. certification", $0) },
+            spot.minDives.map { ("number", "Min. dives", "\($0)") },
+            spot.drysuitRecommended == true ? ("suit.fill", "Dry suit", "Recommended") : nil,
+            spot.access.map { ("road.lanes", "Access", $0) },
+            spot.infrastructure.map { ("building.2.fill", "Infrastructure", $0) },
         ].compactMap { $0 }
 
         return Group {
             if !rows.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    sectionTitle("Вимоги")
+                    sectionTitle("Requirements")
                     VStack(spacing: 0) {
                         ForEach(Array(rows.enumerated()), id: \.offset) { index, row in
                             conditionRow(icon: row.0, title: row.1, value: row.2)
@@ -252,12 +252,12 @@ struct DiveSpotDetailView: View {
 
     private var mapSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            sectionTitle("На карті")
+            sectionTitle("On map")
             Map(initialPosition: .region(MKCoordinateRegion(
                 center: spot.coordinate,
                 span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
             ))) {
-                Marker(spot.name, coordinate: spot.coordinate)
+                Marker(spot.localizedName, coordinate: spot.coordinate)
                     .tint(Color.oceanBlue)
             }
             .frame(height: 200)
@@ -272,7 +272,7 @@ struct DiveSpotDetailView: View {
             } label: {
                 HStack(spacing: 8) {
                     Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
-                    Text("Прокласти маршрут")
+                    Text("Get directions")
                         .fontWeight(.semibold)
                 }
                 .foregroundStyle(Color.navyDeep)
@@ -282,11 +282,11 @@ struct DiveSpotDetailView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }
-        .confirmationDialog("Відкрити в", isPresented: $showNavigationSheet) {
+        .confirmationDialog("Open in", isPresented: $showNavigationSheet) {
             Button("Apple Maps") { openAppleMaps() }
             Button("Google Maps") { openGoogleMaps() }
             Button("Waze") { openWaze() }
-            Button("Скасувати", role: .cancel) { }
+            Button("Cancel", role: .cancel) { }
         }
     }
 

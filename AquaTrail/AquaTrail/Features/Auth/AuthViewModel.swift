@@ -51,6 +51,24 @@ class AuthViewModel {
         }
     }
 
+    func deleteAccount() async {
+        do {
+            let userId = try await supabase.auth.session.user.id
+            // Delete avatar from storage
+            let avatarPath = "\(userId.uuidString)/avatar.jpg"
+            try? await supabase.storage.from("avatars").remove(paths: [avatarPath])
+            // Delete profile
+            try await ProfileService.delete(userId: userId)
+            // Delete dive logs
+            try await supabase.from("dive_logs").delete().eq("user_id", value: userId).execute()
+            // Sign out
+            try? await supabase.auth.signOut(scope: .local)
+            isAuthenticated = false
+        } catch {
+            errorMessage = "Не вдалось видалити акаунт: \(error.localizedDescription)"
+        }
+    }
+
     private func mapError(_ error: Error) -> String {
         let message = error.localizedDescription
         if message.contains("Invalid login") || message.contains("invalid_credentials") {

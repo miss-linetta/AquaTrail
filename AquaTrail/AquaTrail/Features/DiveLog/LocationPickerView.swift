@@ -46,7 +46,7 @@ struct LocationPickerView: View {
                     Map(position: $position) {
                         UserAnnotation()
                         if let pin {
-                            Marker("Місце занурення", coordinate: pin)
+                            Marker("Dive spot", coordinate: pin)
                                 .tint(Color.oceanBlue)
                         }
                     }
@@ -74,7 +74,7 @@ struct LocationPickerView: View {
                             .padding(.bottom, 8)
                     }
 
-                    Text("Натисніть на карту щоб обрати місце")
+                    Text("Tap the map to select a location")
                         .font(.caption)
                         .foregroundStyle(.white)
                         .padding(.horizontal, 16)
@@ -84,16 +84,16 @@ struct LocationPickerView: View {
                         .padding(.bottom, 20)
                 }
             }
-            .navigationTitle("Обрати локацію")
+            .navigationTitle("Select location")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Скасувати") { dismiss() }
+                    Button("Cancel") { dismiss() }
                         .foregroundStyle(.white)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Готово") {
+                    Button("Done") {
                         latitude = pin?.latitude
                         longitude = pin?.longitude
                         dismiss()

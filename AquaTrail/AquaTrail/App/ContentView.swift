@@ -11,16 +11,16 @@ struct ContentView: View {
     var body: some View {
         TabView {
             HomeView()
-                .tabItem { Label("Головна", systemImage: "house.fill") }
+                .tabItem { Label("Home", systemImage: "house.fill") }
 
             DiveLogListView()
-                .tabItem { Label("Щоденник", systemImage: "book.fill") }
+                .tabItem { Label("Dive Log", systemImage: "book.fill") }
 
-            Text("Планування")
-                .tabItem { Label("Планування", systemImage: "map.fill") }
+            PlanningView()
+                .tabItem { Label("Planning", systemImage: "map.fill") }
 
-            Text("Налаштування")
-                .tabItem { Label("Налаштування", systemImage: "gearshape") }
+            SettingsView()
+                .tabItem { Label("Settings", systemImage: "gearshape") }
         }
         .tint(.cyan)
     }

@@ -10,12 +10,14 @@ private struct ProfileUpdate: Encodable {
     var certification: String?
     var totalDives: Int?
     var avatarUrl: String?
+    var interests: [String]?
 
     enum CodingKeys: String, CodingKey {
         case displayName = "display_name"
         case certification
         case totalDives = "total_dives"
         case avatarUrl = "avatar_url"
+        case interests
     }
 }
 
@@ -42,12 +44,21 @@ struct ProfileService {
             displayName: profile.displayName,
             certification: profile.certification,
             totalDives: profile.totalDives,
-            avatarUrl: profile.avatarUrl
+            avatarUrl: profile.avatarUrl,
+            interests: profile.interests
         )
         try await supabase
             .from("profiles")
             .update(update)
             .eq("id", value: profile.id)
+            .execute()
+    }
+
+    static func delete(userId: UUID) async throws {
+        try await supabase
+            .from("profiles")
+            .delete()
+            .eq("id", value: userId)
             .execute()
     }
 }

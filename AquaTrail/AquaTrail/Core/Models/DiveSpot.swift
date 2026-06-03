@@ -13,6 +13,7 @@ struct DiveSpot: Decodable, Identifiable {
     let latitude: Double
     let longitude: Double
     let description: String?
+    let descriptionEn: String?
     let maxDepth: Int?
     let difficulty: String?
     let photoUrl: String?
@@ -33,6 +34,7 @@ struct DiveSpot: Decodable, Identifiable {
     enum CodingKeys: String, CodingKey {
         case id, name, latitude, longitude, description, difficulty, access, infrastructure, tags
         case nameEn = "name_en"
+        case descriptionEn = "description_en"
         case maxDepth = "max_depth"
         case photoUrl = "photo_url"
         case visibilitySummerM = "visibility_summer_m"
@@ -45,6 +47,20 @@ struct DiveSpot: Decodable, Identifiable {
         case minDives = "min_dives"
         case drysuitRecommended = "drysuit_recommended"
         case bestSeason = "best_season"
+    }
+
+    var localizedName: String {
+        if Locale.current.language.languageCode == "en" {
+            return nameEn ?? name
+        }
+        return name
+    }
+
+    var localizedDescription: String? {
+        if Locale.current.language.languageCode == "en" {
+            return descriptionEn ?? description
+        }
+        return description
     }
 
     var coordinate: CLLocationCoordinate2D {

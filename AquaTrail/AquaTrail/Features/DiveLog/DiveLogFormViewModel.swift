@@ -47,16 +47,16 @@ class DiveLogFormViewModel {
     var isEditing: Bool { editingLogId != nil }
 
     let difficulties = ["beginner", "intermediate", "advanced", "expert"]
-    let difficultyLabels = ["Початковий", "Середній", "Просунутий", "Експертний"]
+    let difficultyLabels = [String(localized: "Beginner"), String(localized: "Intermediate"), String(localized: "Advanced"), String(localized: "Expert")]
     let entryTypes = ["shore", "boat"]
-    let entryTypeLabels = ["Берег", "Човен"]
+    let entryTypeLabels = [String(localized: "Shore"), String(localized: "Boat")]
 
     func loadSpots() async {
         allSpots = (try? await DiveSpotService.fetchAll()) ?? []
     }
 
     func selectSpot(_ spot: DiveSpot) {
-        spotName = spot.name
+        spotName = spot.localizedName
         diveSpotId = spot.id
         latitude = spot.latitude
         longitude = spot.longitude
@@ -93,7 +93,7 @@ class DiveLogFormViewModel {
     }
 
     func loadFromSpot(_ spot: DiveSpot) {
-        spotName = spot.name
+        spotName = spot.localizedName
         diveSpotId = spot.id
         latitude = spot.latitude
         longitude = spot.longitude
@@ -104,15 +104,15 @@ class DiveLogFormViewModel {
 
     func save() async -> Bool {
         guard !spotName.isEmpty else {
-            errorMessage = "Вкажіть назву місця"
+            errorMessage = String(localized: "Specify spot name")
             return false
         }
         guard let depth = Int(depthText), depth > 0 else {
-            errorMessage = "Вкажіть коректну глибину"
+            errorMessage = String(localized: "Specify a valid depth")
             return false
         }
         guard let duration = Int(durationText), duration > 0 else {
-            errorMessage = "Вкажіть коректну тривалість"
+            errorMessage = String(localized: "Specify a valid duration")
             return false
         }
 
@@ -161,7 +161,7 @@ class DiveLogFormViewModel {
             savedSuccessfully = true
             return true
         } catch {
-            errorMessage = "Помилка збереження: \(error.localizedDescription)"
+            errorMessage = String(localized: "Save error: \(error.localizedDescription)")
             return false
         }
     }

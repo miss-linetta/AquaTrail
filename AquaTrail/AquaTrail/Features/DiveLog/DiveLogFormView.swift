@@ -40,7 +40,7 @@ struct DiveLogFormView: View {
         .onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
-        .navigationTitle(vm.isEditing ? "Редагувати" : "Нове занурення")
+        .navigationTitle(vm.isEditing ? "Edit" : "New dive")
         .navigationBarTitleDisplayMode(.large)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .task {
@@ -58,11 +58,11 @@ struct DiveLogFormView: View {
 
     private var spotNameSection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Місце занурення")
+            Text("Dive spot")
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.7))
 
-            TextField("Назва дайв-споту", text: $vm.spotName)
+            TextField("Dive spot name", text: $vm.spotName)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(14)
@@ -89,10 +89,14 @@ struct DiveLogFormView: View {
                                 Image(systemName: "mappin.circle.fill")
                                     .foregroundStyle(Color.skyLight)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(spot.name)
+                                    Text(spot.localizedName)
                                         .font(.subheadline)
                                         .foregroundStyle(.white)
-                                    if let nameEn = spot.nameEn {
+                                    if spot.nameEn != nil && spot.localizedName != spot.name {
+                                        Text(spot.name)
+                                            .font(.caption)
+                                            .foregroundStyle(.white.opacity(0.5))
+                                    } else if let nameEn = spot.nameEn {
                                         Text(nameEn)
                                             .font(.caption)
                                             .foregroundStyle(.white.opacity(0.5))
@@ -119,7 +123,7 @@ struct DiveLogFormView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(Color.skyLight)
-                    Text("Пов'язано з дайв-спотом")
+                    Text("Linked to dive spot")
                         .font(.caption)
                         .foregroundStyle(Color.skyLight)
                 }
@@ -131,7 +135,7 @@ struct DiveLogFormView: View {
 
     private var dateSection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Дата")
+            Text("Date")
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.7))
             DatePicker("", selection: $vm.date, displayedComponents: .date)
@@ -146,9 +150,9 @@ struct DiveLogFormView: View {
 
     private var depthDurationRow: some View {
         HStack(spacing: 12) {
-            field(title: "Глибина (м)", text: $vm.depthText, placeholder: "0")
+            field(title: "Depth (m)", text: $vm.depthText, placeholder: "0")
                 .keyboardType(.numberPad)
-            field(title: "Тривалість (хв)", text: $vm.durationText, placeholder: "0")
+            field(title: "Duration (min)", text: $vm.durationText, placeholder: "0")
                 .keyboardType(.numberPad)
         }
     }
@@ -157,9 +161,9 @@ struct DiveLogFormView: View {
 
     private var tempVisibilityRow: some View {
         HStack(spacing: 12) {
-            field(title: "Темп. води (°C)", text: $vm.waterTempText, placeholder: "—")
+            field(title: "Water temp. (°C)", text: $vm.waterTempText, placeholder: "—")
                 .keyboardType(.numberPad)
-            field(title: "Видимість (м)", text: $vm.visibilityText, placeholder: "—")
+            field(title: "Visibility (m)", text: $vm.visibilityText, placeholder: "—")
                 .keyboardType(.numberPad)
         }
     }
@@ -168,7 +172,7 @@ struct DiveLogFormView: View {
 
     private var entryTypeSection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Тип входу")
+            Text("Entry type")
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.7))
             HStack(spacing: 8) {
@@ -193,7 +197,7 @@ struct DiveLogFormView: View {
 
     private var difficultySection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Складність")
+            Text("Difficulty")
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.7))
             ScrollView(.horizontal, showsIndicators: false) {
@@ -220,13 +224,13 @@ struct DiveLogFormView: View {
 
     private var locationMapSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Локація")
+            Text("Location")
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.7))
 
             if let lat = vm.latitude, let lon = vm.longitude {
                 Map(position: $mapPosition) {
-                    Marker(vm.spotName.isEmpty ? "Місце" : vm.spotName,
+                    Marker(vm.spotName.isEmpty ? "Place" : vm.spotName,
                            coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon))
                         .tint(Color.oceanBlue)
                 }
@@ -242,7 +246,7 @@ struct DiveLogFormView: View {
                         .font(.caption)
                         .foregroundStyle(.white.opacity(0.5))
                     Spacer()
-                    Button("Змінити") { showMapPicker = true }
+                    Button("Change") { showMapPicker = true }
                         .font(.caption)
                         .foregroundStyle(Color.skyLight)
                 }
@@ -252,7 +256,7 @@ struct DiveLogFormView: View {
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "map")
-                        Text("Обрати на карті")
+                        Text("Select on map")
                     }
                     .font(.subheadline)
                     .foregroundStyle(.white)
@@ -277,7 +281,7 @@ struct DiveLogFormView: View {
 
     private var ratingSection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Оцінка")
+            Text("Rating")
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.7))
             HStack(spacing: 4) {
@@ -297,14 +301,14 @@ struct DiveLogFormView: View {
     // MARK: – Buddy
 
     private var buddyField: some View {
-        field(title: "Бадді", text: $vm.buddyName, placeholder: "Ім'я напарника")
+        field(title: "Buddy", text: $vm.buddyName, placeholder: "Buddy name")
     }
 
     // MARK: – Notes
 
     private var notesSection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Нотатки")
+            Text("Notes")
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.7))
             TextEditor(text: $vm.notes)
@@ -352,7 +356,7 @@ struct DiveLogFormView: View {
                 if vm.isSaving {
                     ProgressView().tint(Color.navyDeep)
                 }
-                Text(vm.isEditing ? "Оновити" : "Зберегти")
+                Text(vm.isEditing ? "Update" : "Save")
                     .fontWeight(.semibold)
             }
             .foregroundStyle(Color.navyDeep)

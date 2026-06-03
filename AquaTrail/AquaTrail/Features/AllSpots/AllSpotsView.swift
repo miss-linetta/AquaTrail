@@ -9,12 +9,12 @@ import CoreLocation
 // MARK: – Sort
 
 enum SpotSortOption: String, CaseIterable {
-    case nearest = "Найближчі"
-    case farthest = "Найдальші"
-    case easiest = "Легкі → Складні"
-    case hardest = "Складні → Легкі"
-    case shallowest = "Мілкі → Глибокі"
-    case deepest = "Глибокі → Мілкі"
+    case nearest = "Nearest"
+    case farthest = "Farthest"
+    case easiest = "Easy → Hard"
+    case hardest = "Hard → Easy"
+    case shallowest = "Shallow → Deep"
+    case deepest = "Deep → Shallow"
 }
 
 // MARK: – Filter
@@ -130,7 +130,7 @@ struct AllSpotsView: View {
                         .buttonStyle(.plain)
                     }
                     if sortedSpots.isEmpty {
-                        Text("Немає місць за обраними фільтрами")
+                        Text("No spots match selected filters")
                             .font(.subheadline)
                             .foregroundStyle(.white.opacity(0.5))
                             .padding(.top, 40)
@@ -140,7 +140,7 @@ struct AllSpotsView: View {
             }
         }
         .background(Color.navyDeep)
-        .navigationTitle("Всі місця")
+        .navigationTitle("All spots")
         .navigationBarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -168,7 +168,7 @@ struct AllSpotsView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "line.3.horizontal.decrease")
-                        Text("Фільтри")
+                        Text("Filters")
                         if filter.isActive {
                             Circle()
                                 .fill(Color.skyLight)
@@ -190,7 +190,7 @@ struct AllSpotsView: View {
                             sortOption = option
                         }
                     } label: {
-                        Text(option.rawValue)
+                        Text(LocalizedStringKey(option.rawValue))
                             .font(.subheadline)
                             .fontWeight(sortOption == option ? .semibold : .regular)
                             .foregroundStyle(sortOption == option ? Color.navyDeep : .white)
@@ -211,7 +211,7 @@ struct AllSpotsView: View {
     private var filterSheet: some View {
         NavigationStack {
             List {
-                Section("Складність") {
+                Section("Difficulty") {
                     ForEach(availableDifficulties, id: \.self) { diff in
                         Button {
                             toggleFilter(&filter.difficulties, value: diff)
@@ -230,7 +230,7 @@ struct AllSpotsView: View {
                 }
 
                 if !availableCertifications.isEmpty {
-                    Section("Мін. сертифікація") {
+                    Section("Min. certification") {
                         ForEach(availableCertifications, id: \.self) { cert in
                             Button {
                                 toggleFilter(&filter.certifications, value: cert)
@@ -249,51 +249,51 @@ struct AllSpotsView: View {
                     }
                 }
 
-                Section("Макс. відстань") {
+                Section("Max. distance") {
                     HStack {
-                        Text("До")
+                        Text("Up to")
                         Spacer()
                         Picker("", selection: Binding(
                             get: { filter.maxDistanceKm ?? 0 },
                             set: { filter.maxDistanceKm = $0 == 0 ? nil : $0 }
                         )) {
-                            Text("Будь-яка").tag(0)
-                            Text("50 км").tag(50)
-                            Text("100 км").tag(100)
-                            Text("200 км").tag(200)
-                            Text("500 км").tag(500)
+                            Text("Any").tag(0)
+                            Text("50 km").tag(50)
+                            Text("100 km").tag(100)
+                            Text("200 km").tag(200)
+                            Text("500 km").tag(500)
                         }
                         .labelsHidden()
                     }
                 }
 
-                Section("Макс. глибина") {
+                Section("Max. depth") {
                     HStack {
-                        Text("До")
+                        Text("Up to")
                         Spacer()
                         Picker("", selection: Binding(
                             get: { filter.maxDepth ?? 0 },
                             set: { filter.maxDepth = $0 == 0 ? nil : $0 }
                         )) {
-                            Text("Будь-яка").tag(0)
-                            Text("10 м").tag(10)
-                            Text("20 м").tag(20)
-                            Text("30 м").tag(30)
-                            Text("40 м").tag(40)
-                            Text("50 м").tag(50)
+                            Text("Any").tag(0)
+                            Text("10 m").tag(10)
+                            Text("20 m").tag(20)
+                            Text("30 m").tag(30)
+                            Text("40 m").tag(40)
+                            Text("50 m").tag(50)
                         }
                         .labelsHidden()
                     }
                 }
             }
-            .navigationTitle("Фільтри")
+            .navigationTitle("Filters")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Готово") { showFilters = false }
+                    Button("Done") { showFilters = false }
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Скинути") {
+                    Button("Reset") {
                         filter = SpotFilter()
                     }
                     .foregroundStyle(.red)
@@ -330,7 +330,7 @@ struct AllSpotsView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(spot.name)
+                Text(spot.localizedName)
                     .font(.headline)
                     .foregroundStyle(.white)
                     .lineLimit(2)
@@ -345,7 +345,7 @@ struct AllSpotsView: View {
                     HStack(spacing: 4) {
                         Image(systemName: "location.fill")
                             .font(.caption2)
-                        Text("\(km) км")
+                        Text("\(km) km")
                     }
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.7))
@@ -360,7 +360,7 @@ struct AllSpotsView: View {
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundStyle(.white)
-                    Text("м")
+                    Text("m")
                         .font(.caption2)
                         .foregroundStyle(.white.opacity(0.6))
                 }

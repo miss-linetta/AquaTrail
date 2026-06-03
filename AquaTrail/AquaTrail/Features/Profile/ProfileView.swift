@@ -35,7 +35,7 @@ struct ProfileView: View {
         .onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
-        .navigationTitle("Профіль")
+        .navigationTitle("Profile")
         .navigationBarTitleDisplayMode(.large)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbar {
@@ -113,16 +113,16 @@ struct ProfileView: View {
                     }
                 }
             }
-            .confirmationDialog("Обрати фото", isPresented: $showPhotoSource) {
-                Button("Зробити фото") { showCamera = true }
-                Button("Обрати з галереї") { showGallery = true }
-                Button("Обрати з файлів") { showFilePicker = true }
+            .confirmationDialog("Choose photo", isPresented: $showPhotoSource) {
+                Button("Take photo") { showCamera = true }
+                Button("Choose from gallery") { showGallery = true }
+                Button("Choose from files") { showFilePicker = true }
                 if vm.avatarImage != nil {
-                    Button("Видалити фото", role: .destructive) {
+                    Button("Delete photo", role: .destructive) {
                         Task { await vm.deleteAvatar() }
                     }
                 }
-                Button("Скасувати", role: .cancel) { }
+                Button("Cancel", role: .cancel) { }
             }
 
             if let email = try? supabase.auth.currentSession?.user.email {
@@ -147,10 +147,10 @@ struct ProfileView: View {
 
     private var formSection: some View {
         VStack(spacing: 16) {
-            field(title: "Ім'я", text: $vm.displayName, placeholder: "Як вас звати?")
+            field(title: "Name", text: $vm.displayName, placeholder: "What's your name?")
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("Сертифікація")
+                Text("Certification")
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.7))
 
@@ -173,8 +173,36 @@ struct ProfileView: View {
                 }
             }
 
-            field(title: "Кількість занурень", text: $vm.totalDives, placeholder: "0")
+            field(title: "Number of dives", text: $vm.totalDives, placeholder: "0")
                 .keyboardType(.numberPad)
+
+            // Interests
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Interests (for recommendations)")
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.7))
+
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 90))], spacing: 8) {
+                    ForEach(ProfileViewModel.allInterests, id: \.self) { interest in
+                        let selected = vm.selectedInterests.contains(interest)
+                        Button {
+                            if selected {
+                                vm.selectedInterests.remove(interest)
+                            } else {
+                                vm.selectedInterests.insert(interest)
+                            }
+                        } label: {
+                            Text(ProfileViewModel.interestLabels[interest] ?? interest)
+                                .font(.subheadline)
+                                .foregroundStyle(selected ? Color.navyDeep : .white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 8)
+                                .background(selected ? Color.skyLight : Color.deepTeal.opacity(0.5))
+                                .clipShape(Capsule())
+                        }
+                    }
+                }
+            }
 
             if let error = vm.errorMessage {
                 HStack(spacing: 8) {
@@ -192,7 +220,7 @@ struct ProfileView: View {
             if vm.savedSuccessfully {
                 HStack(spacing: 8) {
                     Image(systemName: "checkmark.circle.fill")
-                    Text("Збережено")
+                    Text("Saved")
                 }
                 .font(.subheadline)
                 .foregroundStyle(.white)
@@ -234,7 +262,7 @@ struct ProfileView: View {
                 if vm.isSaving {
                     ProgressView().tint(Color.navyDeep)
                 }
-                Text("Зберегти")
+                Text("Save")
                     .fontWeight(.semibold)
             }
             .foregroundStyle(Color.navyDeep)
@@ -250,7 +278,7 @@ struct ProfileView: View {
         Button {
             authVM.signOut()
         } label: {
-            Text("Вийти з акаунту")
+            Text("Sign out")
                 .fontWeight(.semibold)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
