@@ -30,11 +30,17 @@ class DiveLogViewModel {
     }
 
     func localizedSpotName(for log: DiveLog) -> String {
+        // Try by ID first
         if let spotId = log.diveSpotId,
            let spot = spots.first(where: { $0.id == spotId }) {
             return spot.localizedName
         }
-        return log.spotName
+        // Fallback: try matching by name or nameEn
+        let name = log.spotName
+        if let spot = spots.first(where: { $0.name == name || $0.nameEn == name }) {
+            return spot.localizedName
+        }
+        return name
     }
 
     func load() async {

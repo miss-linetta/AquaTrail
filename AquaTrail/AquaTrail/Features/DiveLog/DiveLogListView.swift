@@ -154,7 +154,7 @@ struct DiveLogListView: View {
         .padding(.horizontal, 16)
     }
 
-    private func statItem(value: String, label: String) -> some View {
+    private func statItem(value: String, label: LocalizedStringKey) -> some View {
         VStack(spacing: 4) {
             Text(value)
                 .font(.title3)

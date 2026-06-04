@@ -232,7 +232,7 @@ struct ProfileView: View {
         }
     }
 
-    private func field(title: String, text: Binding<String>, placeholder: String) -> some View {
+    private func field(title: LocalizedStringKey, text: Binding<String>, placeholder: LocalizedStringKey) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
                 .font(.caption)

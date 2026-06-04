@@ -217,7 +217,7 @@ struct AllSpotsView: View {
                             toggleFilter(&filter.difficulties, value: diff)
                         } label: {
                             HStack {
-                                Text(diff)
+                                Text(DiveSpot.localizedDifficultyLabel(diff))
                                     .foregroundStyle(.primary)
                                 Spacer()
                                 if filter.difficulties.contains(diff) {
@@ -335,7 +335,7 @@ struct AllSpotsView: View {
                     .foregroundStyle(.white)
                     .lineLimit(2)
 
-                if let difficulty = spot.difficulty {
+                if let difficulty = spot.localizedDifficulty {
                     Text(difficulty)
                         .font(.caption)
                         .foregroundStyle(Color.skyLight)

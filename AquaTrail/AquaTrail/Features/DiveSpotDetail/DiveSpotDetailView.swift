@@ -117,21 +117,21 @@ struct DiveSpotDetailView: View {
     private var quickInfoGrid: some View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
             if let depth = spot.maxDepth {
-                infoCard(icon: "arrow.down.to.line", title: "Max. depth", value: "\(depth) m")
+                infoCard(icon: "arrow.down.to.line", title: "Max. depth", value: "\(depth) \(String(localized: "m"))")
             }
-            if let difficulty = spot.difficulty {
+            if let difficulty = spot.localizedDifficulty {
                 infoCard(icon: "gauge.medium", title: "Difficulty", value: difficulty)
             }
-            if let entry = spot.entryType {
+            if let entry = spot.localizedEntryType {
                 infoCard(icon: "figure.walk", title: "Entry", value: entry)
             }
-            if let season = spot.bestSeason {
+            if let season = spot.localizedBestSeason {
                 infoCard(icon: "calendar", title: "Best season", value: season)
             }
         }
     }
 
-    private func infoCard(icon: String, title: String, value: String) -> some View {
+    private func infoCard(icon: String, title: LocalizedStringKey, value: String) -> some View {
         VStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.title2)
@@ -170,13 +170,13 @@ struct DiveSpotDetailView: View {
     // MARK: – Conditions
 
     private var conditionsSection: some View {
-        let rows: [(String, String, String)] = [
-            spot.visibilitySummerM.map { ("eye.fill", "Visibility (summer)", "\($0) m") },
-            spot.visibilityWinterM.map { ("eye.fill", "Visibility (winter)", "\($0) m") },
-            spot.waterTempSurfaceC.map { ("thermometer.medium", "Surface temp.", "\($0)°C") },
-            spot.waterTempBottomC.map { ("thermometer.snowflake", "Bottom temp.", "\($0)°C") },
-            spot.thermoclineDepthM.map { ("water.waves", "Thermocline", "\($0) m") },
-        ].compactMap { $0 }
+        var rows: [(String, LocalizedStringKey, String)] = []
+        let mUnit = String(localized: "m")
+        if let v = spot.visibilitySummerM { rows.append(("eye.fill", "Visibility (summer)", "\(v) \(mUnit)")) }
+        if let v = spot.visibilityWinterM { rows.append(("eye.fill", "Visibility (winter)", "\(v) \(mUnit)")) }
+        if let v = spot.waterTempSurfaceC { rows.append(("thermometer.medium", "Surface temp.", "\(v)°C")) }
+        if let v = spot.waterTempBottomC { rows.append(("thermometer.snowflake", "Bottom temp.", "\(v)°C")) }
+        if let v = spot.thermoclineDepthM { rows.append(("water.waves", "Thermocline", "\(v) \(mUnit)")) }
 
         return Group {
             if !rows.isEmpty {
@@ -197,7 +197,7 @@ struct DiveSpotDetailView: View {
         }
     }
 
-    private func conditionRow(icon: String, title: String, value: String) -> some View {
+    private func conditionRow(icon: String, title: LocalizedStringKey, value: String) -> some View {
         HStack {
             Image(systemName: icon)
                 .font(.body)
@@ -219,13 +219,22 @@ struct DiveSpotDetailView: View {
     // MARK: – Requirements
 
     private var requirementsSection: some View {
-        let rows: [(String, String, String)] = [
-            spot.minCertification.map { ("checkmark.seal.fill", "Min. certification", $0) },
-            spot.minDives.map { ("number", "Min. dives", "\($0)") },
-            spot.drysuitRecommended == true ? ("suit.fill", "Dry suit", "Recommended") : nil,
-            spot.access.map { ("road.lanes", "Access", $0) },
-            spot.infrastructure.map { ("building.2.fill", "Infrastructure", $0) },
-        ].compactMap { $0 }
+        var rows: [(String, LocalizedStringKey, String)] = []
+        if let cert = spot.minCertification {
+            rows.append(("checkmark.seal.fill", "Min. certification", cert))
+        }
+        if let dives = spot.minDives {
+            rows.append(("number", "Min. dives", "\(dives)"))
+        }
+        if spot.drysuitRecommended == true {
+            rows.append(("suit.fill", "Dry suit", String(localized: "Recommended")))
+        }
+        if let access = spot.localizedAccess {
+            rows.append(("road.lanes", "Access", access))
+        }
+        if let infra = spot.localizedInfrastructure {
+            rows.append(("building.2.fill", "Infrastructure", infra))
+        }
 
         return Group {
             if !rows.isEmpty {
@@ -317,7 +326,7 @@ struct DiveSpotDetailView: View {
 
     // MARK: – Helpers
 
-    private func sectionTitle(_ text: String) -> some View {
+    private func sectionTitle(_ text: LocalizedStringKey) -> some View {
         Text(text)
             .font(.title3)
             .fontWeight(.bold)

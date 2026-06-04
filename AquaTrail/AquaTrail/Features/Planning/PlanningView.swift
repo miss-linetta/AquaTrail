@@ -184,7 +184,7 @@ struct PlanningView: View {
         .padding(.horizontal, 16)
     }
 
-    private func profileStat(value: String, unit: String, label: String) -> some View {
+    private func profileStat(value: String, unit: String, label: LocalizedStringKey) -> some View {
         VStack(spacing: 4) {
             HStack(alignment: .lastTextBaseline, spacing: 1) {
                 Text(value)

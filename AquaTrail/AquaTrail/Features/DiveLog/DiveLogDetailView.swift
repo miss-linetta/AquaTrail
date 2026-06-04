@@ -43,8 +43,8 @@ struct DiveLogDetailView: View {
 
                 // Main stats
                 HStack(spacing: 12) {
-                    statCard(icon: "arrow.down.to.line", title: "Depth", value: "\(log.depth) m")
-                    statCard(icon: "clock.fill", title: "Time", value: "\(log.duration) min")
+                    statCard(icon: "arrow.down.to.line", title: "Depth", value: "\(log.depth) \(String(localized: "m"))")
+                    statCard(icon: "clock.fill", title: "Time", value: "\(log.duration) \(String(localized: "min"))")
                 }
 
                 // Conditions
@@ -55,7 +55,7 @@ struct DiveLogDetailView: View {
                             .font(.headline)
                             .foregroundStyle(.white)
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                            ForEach(conditions, id: \.title) { item in
+                            ForEach(Array(conditions.enumerated()), id: \.offset) { _, item in
                                 statCard(icon: item.icon, title: item.title, value: item.value)
                             }
                         }
@@ -115,7 +115,7 @@ struct DiveLogDetailView: View {
         }
     }
 
-    private func statCard(icon: String, title: String, value: String) -> some View {
+    private func statCard(icon: String, title: LocalizedStringKey, value: String) -> some View {
         VStack(spacing: 6) {
             Image(systemName: icon)
                 .font(.title3)
@@ -134,7 +134,7 @@ struct DiveLogDetailView: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
-    private func infoRow(icon: String, title: String, value: String) -> some View {
+    private func infoRow(icon: String, title: LocalizedStringKey, value: String) -> some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.body)
@@ -156,7 +156,7 @@ struct DiveLogDetailView: View {
 
     private struct ConditionItem {
         let icon: String
-        let title: String
+        let title: LocalizedStringKey
         let value: String
     }
 
@@ -166,26 +166,26 @@ struct DiveLogDetailView: View {
             items.append(ConditionItem(icon: "thermometer.medium", title: "Water temp.", value: "\(temp)°C"))
         }
         if let vis = log.visibility {
-            items.append(ConditionItem(icon: "eye.fill", title: "Visibility", value: "\(vis) m"))
+            items.append(ConditionItem(icon: "eye.fill", title: "Visibility", value: "\(vis) \(String(localized: "m"))"))
         }
         return items
     }
 
     private func difficultyLabel(_ d: String) -> String {
-        switch d {
-        case "beginner": return "Beginner"
-        case "intermediate": return "Intermediate"
-        case "advanced": return "Advanced"
-        case "expert": return "Expert"
-        default: return d
-        }
+        DiveSpot.localizedDifficultyLabel(d)
     }
 
+    private static let entryLabelMap = [
+        "shore": "Sandy", "rock": "Rocky", "beach": "Sandy", "boat": "Boat"
+    ]
+    private static let entryLabelUkMap = [
+        "shore": "Піщаний", "rock": "Кам'янистий", "beach": "Піщаний", "boat": "З човна"
+    ]
+
     private func entryLabel(_ e: String) -> String {
-        switch e {
-        case "shore": return "Shore"
-        case "boat": return "Boat"
-        default: return e
+        if DiveSpot.isAppEnglish {
+            return Self.entryLabelMap[e] ?? e.capitalized
         }
+        return Self.entryLabelUkMap[e] ?? e
     }
 }
