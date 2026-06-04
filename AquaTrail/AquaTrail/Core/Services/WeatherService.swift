@@ -6,7 +6,7 @@
 import Foundation
 
 struct WeatherData {
-    let airTemp: Double
+    let airTemp: Double?
     let waterTemp: Double?
 }
 
@@ -14,7 +14,7 @@ struct WeatherService {
     static func fetch(latitude: Double, longitude: Double) async -> WeatherData {
         async let airTemp = fetchAirTemperature(latitude: latitude, longitude: longitude)
         async let waterTemp = fetchWaterTemperature(latitude: latitude, longitude: longitude)
-        return WeatherData(airTemp: (try? await airTemp) ?? 0, waterTemp: try? await waterTemp)
+        return WeatherData(airTemp: try? await airTemp, waterTemp: try? await waterTemp)
     }
 
     private static func fetchAirTemperature(latitude: Double, longitude: Double) async throws -> Double {

@@ -163,13 +163,15 @@ struct HomeView: View {
                     .font(.system(size: 34, weight: .bold))
                     .foregroundStyle(.white)
 
-                if let weather = vm.weather {
+                if let weather = vm.weather, (weather.airTemp != nil || weather.waterTemp != nil) {
                     HStack(spacing: 16) {
-                        HStack(spacing: 6) {
-                            Image(systemName: "thermometer.medium")
-                                .foregroundStyle(.white.opacity(0.75))
-                            Text("\(Int(weather.airTemp.rounded()))°C")
-                                .foregroundStyle(.white)
+                        if let airTemp = weather.airTemp {
+                            HStack(spacing: 6) {
+                                Image(systemName: "thermometer.medium")
+                                    .foregroundStyle(.white.opacity(0.75))
+                                Text("\(Int(airTemp.rounded()))°C")
+                                    .foregroundStyle(.white)
+                            }
                         }
                         if let waterTemp = weather.waterTemp {
                             HStack(spacing: 6) {
