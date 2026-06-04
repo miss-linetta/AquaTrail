@@ -30,18 +30,18 @@ struct PlanningView: View {
             }
             .background(Color.navyDeep)
             .navigationTitle("Planning")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
-                if authVM.isAuthenticated && !vm.recommendations.isEmpty {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button {
-                            showMap = true
-                        } label: {
-                            Image(systemName: "map.fill")
-                                .foregroundStyle(Color.skyLight)
-                        }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showMap = true
+                    } label: {
+                        Image(systemName: "map.fill")
+                            .foregroundStyle(Color.skyLight)
                     }
+                    .opacity(authVM.isAuthenticated && !vm.recommendations.isEmpty ? 1 : 0)
+                    .disabled(!(authVM.isAuthenticated && !vm.recommendations.isEmpty))
                 }
             }
             .task {
@@ -81,48 +81,54 @@ struct PlanningView: View {
     // MARK: – Not authenticated
 
     private var notAuthenticatedView: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "sparkles")
-                .font(.system(size: 48))
-                .foregroundStyle(Color.skyLight.opacity(0.5))
+        ScrollView {
+            VStack(spacing: 16) {
+                Image(systemName: "sparkles")
+                    .font(.system(size: 48))
+                    .foregroundStyle(Color.skyLight.opacity(0.5))
 
-            Text("Sign in to get personalized recommendations")
-                .font(.headline)
-                .foregroundStyle(.white)
-                .multilineTextAlignment(.center)
+                Text("Sign in to get personalized recommendations")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
 
-            Button { showAuth = true } label: {
-                Text("Sign in")
-                    .fontWeight(.semibold)
-                    .foregroundStyle(Color.navyDeep)
-                    .padding(.horizontal, 32)
-                    .padding(.vertical, 14)
-                    .background(Color.skyLight)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                Button { showAuth = true } label: {
+                    Text("Sign in")
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.navyDeep)
+                        .padding(.horizontal, 32)
+                        .padding(.vertical, 14)
+                        .background(Color.skyLight)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                }
             }
+            .frame(maxWidth: .infinity)
+            .padding(.top, 120)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     // MARK: – No logs
 
     private var noLogsView: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "chart.bar.doc.horizontal")
-                .font(.system(size: 48))
-                .foregroundStyle(Color.skyLight.opacity(0.5))
+        ScrollView {
+            VStack(spacing: 16) {
+                Image(systemName: "chart.bar.doc.horizontal")
+                    .font(.system(size: 48))
+                    .foregroundStyle(Color.skyLight.opacity(0.5))
 
-            Text("Add records to your log")
-                .font(.headline)
-                .foregroundStyle(.white)
+                Text("Add records to your log")
+                    .font(.headline)
+                    .foregroundStyle(.white)
 
-            Text("The system will analyze your dives and suggest the best spots")
-                .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.6))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+                Text("The system will analyze your dives and suggest the best spots")
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.6))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.top, 120)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     // MARK: – Profile summary

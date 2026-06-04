@@ -27,18 +27,18 @@ struct DiveLogListView: View {
             }
             .background(Color.navyDeep)
             .navigationTitle("Dive Log")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
-                if authVM.isAuthenticated {
-                    ToolbarItem(placement: .primaryAction) {
-                        NavigationLink {
-                            DiveLogFormView()
-                        } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .foregroundStyle(Color.skyLight)
-                        }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        DiveLogFormView()
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundStyle(Color.skyLight)
                     }
+                    .opacity(authVM.isAuthenticated ? 1 : 0)
+                    .disabled(!authVM.isAuthenticated)
                 }
             }
             .task(id: authVM.isAuthenticated) {
@@ -76,61 +76,67 @@ struct DiveLogListView: View {
     // MARK: – Not authenticated
 
     private var notAuthenticatedView: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "book.closed.fill")
-                .font(.system(size: 48))
-                .foregroundStyle(Color.skyLight.opacity(0.5))
+        ScrollView {
+            VStack(spacing: 16) {
+                Image(systemName: "book.closed.fill")
+                    .font(.system(size: 48))
+                    .foregroundStyle(Color.skyLight.opacity(0.5))
 
-            Text("Sign in to keep a dive log")
-                .font(.headline)
-                .foregroundStyle(.white)
-                .multilineTextAlignment(.center)
+                Text("Sign in to keep a dive log")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
 
-            Button { showAuth = true } label: {
-                Text("Sign in")
-                    .fontWeight(.semibold)
-                    .foregroundStyle(Color.navyDeep)
-                    .padding(.horizontal, 32)
-                    .padding(.vertical, 14)
-                    .background(Color.skyLight)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                Button { showAuth = true } label: {
+                    Text("Sign in")
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.navyDeep)
+                        .padding(.horizontal, 32)
+                        .padding(.vertical, 14)
+                        .background(Color.skyLight)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                }
             }
+            .frame(maxWidth: .infinity)
+            .padding(.top, 120)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     // MARK: – Empty state
 
     private var emptyStateView: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "water.waves")
-                .font(.system(size: 48))
-                .foregroundStyle(Color.skyLight.opacity(0.5))
+        ScrollView {
+            VStack(spacing: 16) {
+                Image(systemName: "water.waves")
+                    .font(.system(size: 48))
+                    .foregroundStyle(Color.skyLight.opacity(0.5))
 
-            Text("No records yet")
-                .font(.headline)
-                .foregroundStyle(.white)
+                Text("No records yet")
+                    .font(.headline)
+                    .foregroundStyle(.white)
 
-            Text("Add your first dive")
-                .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.6))
+                Text("Add your first dive")
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.6))
 
-            NavigationLink {
-                DiveLogFormView()
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "plus")
-                    Text("Add dive")
+                NavigationLink {
+                    DiveLogFormView()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "plus")
+                        Text("Add dive")
+                    }
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color.navyDeep)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 14)
+                    .background(Color.skyLight)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
-                .fontWeight(.semibold)
-                .foregroundStyle(Color.navyDeep)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 14)
-                .background(Color.skyLight)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
             }
+            .frame(maxWidth: .infinity)
+            .padding(.top, 120)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     // MARK: – Stats header

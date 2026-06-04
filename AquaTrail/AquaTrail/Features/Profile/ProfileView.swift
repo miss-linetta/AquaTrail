@@ -25,6 +25,7 @@ struct ProfileView: View {
             VStack(spacing: 24) {
                 avatar
                 formSection
+                equipmentSection
                 saveButton
                 signOutButton
             }
@@ -252,6 +253,85 @@ struct ProfileView: View {
                         .stroke(Color.diveBlue.opacity(0.3), lineWidth: 1)
                 )
                 .contentShape(Rectangle())
+        }
+    }
+
+    // MARK: – Equipment
+
+    @State private var equipmentVM = EquipmentViewModel()
+
+    private var equipmentSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Equipment")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                Spacer()
+                NavigationLink {
+                    EquipmentListView()
+                } label: {
+                    Text("All")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.skyLight)
+                }
+            }
+
+            if equipmentVM.items.isEmpty {
+                NavigationLink {
+                    EquipmentFormView()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundStyle(Color.skyLight)
+                        Text("Add equipment")
+                            .font(.subheadline)
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(14)
+                    .background(Color.deepTeal.opacity(0.5))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                }
+            } else {
+                ForEach(equipmentVM.items.prefix(3)) { item in
+                    NavigationLink {
+                        EquipmentDetailView(item: item)
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: item.typeIcon)
+                                .font(.body)
+                                .foregroundStyle(Color.skyLight)
+                                .frame(width: 28)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(item.name)
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                    .foregroundStyle(.white)
+                                Text(item.localizedType)
+                                    .font(.caption)
+                                    .foregroundStyle(.white.opacity(0.6))
+                            }
+                            Spacer()
+                            if item.worstStatus == .overdue || item.worstStatus == .dueSoon {
+                                Circle()
+                                    .fill(item.worstStatus == .overdue ? Color.red : Color.orange)
+                                    .frame(width: 8, height: 8)
+                            } else if let brand = item.brand {
+                                Text(brand)
+                                    .font(.caption)
+                                    .foregroundStyle(.white.opacity(0.5))
+                            }
+                        }
+                        .padding(12)
+                        .background(Color.deepTeal.opacity(0.5))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+        .task {
+            await equipmentVM.load()
         }
     }
 

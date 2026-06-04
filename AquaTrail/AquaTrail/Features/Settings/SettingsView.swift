@@ -38,7 +38,7 @@ struct SettingsView: View {
             .contentMargins(.top, 16, for: .scrollContent)
             .background(Color.navyDeep)
             .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .task {
                 if authVM.isAuthenticated {

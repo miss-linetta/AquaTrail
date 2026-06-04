@@ -17,6 +17,26 @@
         }
       }
     },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@: %2$@"
+          }
+        }
+      }
+    },
     "%d km" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -63,6 +83,16 @@
     },
     "%lld" : {
 
+    },
+    "%lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld %2$@"
+          }
+        }
+      }
     },
     "%lld km" : {
       "localizations" : {
@@ -114,6 +144,9 @@
 
     },
     "0" : {
+
+    },
+    "5 %@" : {
 
     },
     "10 m" : {
@@ -236,12 +269,32 @@
         }
       }
     },
+    "Add equipment" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Додати спорядження"
+          }
+        }
+      }
+    },
     "Add records to your log" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Додайте записи у щоденник"
+          }
+        }
+      }
+    },
+    "Add your diving gear to keep track of it" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Додайте ваше дайвінг-спорядження для обліку"
           }
         }
       }
@@ -273,6 +326,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Просунутий"
+          }
+        }
+      }
+    },
+    "All" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Все"
           }
         }
       }
@@ -415,6 +478,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Темп. на дні"
+          }
+        }
+      }
+    },
+    "Brand" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бренд"
           }
         }
       }
@@ -853,12 +926,42 @@
         }
       }
     },
+    "Equipment" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спорядження"
+          }
+        }
+      }
+    },
+    "Equipment name" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Назва спорядження"
+          }
+        }
+      }
+    },
     "Expert" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Експертний"
+          }
+        }
+      }
+    },
+    "Failed to delete equipment" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалось видалити спорядження"
           }
         }
       }
@@ -879,6 +982,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Не вдалось видалити запис"
+          }
+        }
+      }
+    },
+    "Failed to load equipment" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалось завантажити спорядження"
           }
         }
       }
@@ -1018,6 +1131,26 @@
         }
       }
     },
+    "Hydro test" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гідротест"
+          }
+        }
+      }
+    },
+    "Hydrostatic test" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гідростатичне випробування"
+          }
+        }
+      }
+    },
     "Infrastructure" : {
       "localizations" : {
         "uk" : {
@@ -1069,6 +1202,16 @@
         }
       }
     },
+    "Interval" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Інтервал"
+          }
+        }
+      }
+    },
     "JOIN US" : {
       "localizations" : {
         "uk" : {
@@ -1085,6 +1228,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Мова"
+          }
+        }
+      }
+    },
+    "Last service" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Останній сервіс"
+          }
+        }
+      }
+    },
+    "Last test" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Останній тест"
           }
         }
       }
@@ -1189,6 +1352,29 @@
         }
       }
     },
+    "MK25" : {
+
+    },
+    "Model" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Модель"
+          }
+        }
+      }
+    },
+    "months" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "міс."
+          }
+        }
+      }
+    },
     "My location" : {
       "localizations" : {
         "uk" : {
@@ -1240,6 +1426,26 @@
         }
       }
     },
+    "New equipment" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нове спорядження"
+          }
+        }
+      }
+    },
+    "Next test: in 5 years" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Наступний тест: через 5 років"
+          }
+        }
+      }
+    },
     "Night" : {
       "localizations" : {
         "uk" : {
@@ -1250,12 +1456,32 @@
         }
       }
     },
+    "No equipment yet" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ще немає спорядження"
+          }
+        }
+      }
+    },
     "No records yet" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ще немає записів"
+          }
+        }
+      }
+    },
+    "No service date" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Немає дати сервісу"
           }
         }
       }
@@ -1373,6 +1599,26 @@
         }
       }
     },
+    "Purchase date" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дата покупки"
+          }
+        }
+      }
+    },
+    "Rate the app" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оцінити додаток"
+          }
+        }
+      }
+    },
     "Rating" : {
       "localizations" : {
         "uk" : {
@@ -1453,26 +1699,6 @@
         }
       }
     },
-    "Share AquaTrail" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Поділитись AquaTrail"
-          }
-        }
-      }
-    },
-    "Rate the app" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Оцінити додаток"
-          }
-        }
-      }
-    },
     "Reset" : {
       "localizations" : {
         "uk" : {
@@ -1513,6 +1739,9 @@
         }
       }
     },
+    "Scubapro" : {
+
+    },
     "Select location" : {
       "localizations" : {
         "uk" : {
@@ -1529,6 +1758,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Обрати на карті"
+          }
+        }
+      }
+    },
+    "Service" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обслуговування"
+          }
+        }
+      }
+    },
+    "Service due soon" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скоро сервіс"
+          }
+        }
+      }
+    },
+    "Service OK" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сервіс ОК"
+          }
+        }
+      }
+    },
+    "Service overdue" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сервіс прострочений"
           }
         }
       }
@@ -1550,6 +1819,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Мілкі → Глибокі"
+          }
+        }
+      }
+    },
+    "Share AquaTrail" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поділитись AquaTrail"
           }
         }
       }
@@ -1634,6 +1913,16 @@
         }
       }
     },
+    "Specify equipment name" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вкажіть назву спорядження"
+          }
+        }
+      }
+    },
     "Specify spot name" : {
       "localizations" : {
         "uk" : {
@@ -1651,6 +1940,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сходи"
+          }
+        }
+      }
+    },
+    "Status" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Статус"
           }
         }
       }
@@ -1751,6 +2050,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Тренування"
+          }
+        }
+      }
+    },
+    "Type" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тип"
           }
         }
       }
@@ -1864,6 +2173,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Уламки"
+          }
+        }
+      }
+    },
+    "years" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "років"
           }
         }
       }
