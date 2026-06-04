@@ -338,6 +338,7 @@
 
     },
     "Author" : {
+      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {
@@ -1079,7 +1080,6 @@
       }
     },
     "Language" : {
-      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {
@@ -1129,16 +1129,6 @@
         }
       }
     },
-    "min" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "хв"
-          }
-        }
-      }
-    },
     "Max. depth" : {
       "localizations" : {
         "uk" : {
@@ -1155,6 +1145,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Макс. відстань"
+          }
+        }
+      }
+    },
+    "min" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "хв"
           }
         }
       }
@@ -1322,6 +1322,7 @@
       }
     },
     "Petrovych Nataliia" : {
+      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {
@@ -1448,6 +1449,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Потрібна вища сертифікація"
+          }
+        }
+      }
+    },
+    "Share AquaTrail" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поділитись AquaTrail"
+          }
+        }
+      }
+    },
+    "Rate the app" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оцінити додаток"
           }
         }
       }

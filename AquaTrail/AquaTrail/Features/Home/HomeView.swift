@@ -64,7 +64,7 @@ struct HomeView: View {
             }
             .fullScreenCover(isPresented: $showProfile) {
                 NavigationStack {
-                    ProfileView()
+                    ProfileView(showCloseButton: true)
                         .environment(authVM)
                 }
             }

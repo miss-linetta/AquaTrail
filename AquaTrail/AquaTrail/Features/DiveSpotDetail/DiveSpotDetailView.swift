@@ -87,28 +87,45 @@ struct DiveSpotDetailView: View {
             conditionsSection
             requirementsSection
             mapSection
-            logDiveButton
+            buttonsSection
         }
         .padding(16)
         .padding(.bottom, 40)
     }
 
-    // MARK: – Log dive
+    // MARK: – Buttons
 
-    private var logDiveButton: some View {
-        NavigationLink {
-            DiveLogFormView(prefillSpot: spot)
-        } label: {
-            HStack(spacing: 8) {
-                Image(systemName: "pencil.and.list.clipboard")
-                Text("Log dive")
-                    .fontWeight(.semibold)
+    private var buttonsSection: some View {
+        HStack(spacing: 12) {
+            Button {
+                showNavigationSheet = true
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
+                    Text("Get directions")
+                        .fontWeight(.semibold)
+                }
+                .foregroundStyle(Color.navyDeep)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(Color.skyLight)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
             }
-            .foregroundStyle(.white)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .background(Color.oceanBlue)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+
+            NavigationLink {
+                DiveLogFormView(prefillSpot: spot)
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "pencil.and.list.clipboard")
+                    Text("Log dive")
+                        .fontWeight(.semibold)
+                }
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(Color.oceanBlue)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
         }
     }
 
@@ -227,7 +244,7 @@ struct DiveSpotDetailView: View {
             rows.append(("number", "Min. dives", "\(dives)"))
         }
         if spot.drysuitRecommended == true {
-            rows.append(("suit.fill", "Dry suit", String(localized: "Recommended")))
+            rows.append(("snowflake", "Dry suit", String(localized: "Recommended")))
         }
         if let access = spot.localizedAccess {
             rows.append(("road.lanes", "Access", access))
@@ -276,20 +293,6 @@ struct DiveSpotDetailView: View {
                 showNavigationSheet = true
             }
 
-            Button {
-                showNavigationSheet = true
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
-                    Text("Get directions")
-                        .fontWeight(.semibold)
-                }
-                .foregroundStyle(Color.navyDeep)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(Color.skyLight)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
         }
         .confirmationDialog("Open in", isPresented: $showNavigationSheet) {
             Button("Apple Maps") { openAppleMaps() }

@@ -4,9 +4,11 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct SettingsView: View {
     @Environment(AuthViewModel.self) private var authVM
+    @Environment(\.requestReview) private var requestReview
     @State private var vm = SettingsViewModel()
     @State private var showAuth = false
 
@@ -23,7 +25,9 @@ struct SettingsView: View {
                 if authVM.isAuthenticated {
                     profileSection
                 }
+                languageSection
                 aboutSection
+                shareSection
                 authSection
                 if authVM.isAuthenticated {
                     deleteSection
@@ -31,6 +35,7 @@ struct SettingsView: View {
             }
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
+            .contentMargins(.top, 16, for: .scrollContent)
             .background(Color.navyDeep)
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.large)
@@ -108,17 +113,42 @@ struct SettingsView: View {
                 .padding(.vertical, 4)
             }
         }
-        .listRowBackground(Color.deepTeal.opacity(0.5))
+        .listRowBackground(Color.slateTeal)
     }
 
     private var profilePlaceholder: some View {
         Circle()
-            .fill(Color.deepTeal)
+            .fill(Color.slateTeal)
             .frame(width: 48, height: 48)
             .overlay(
                 Image(systemName: "person.fill")
                     .foregroundStyle(Color.skyLight)
             )
+    }
+
+    // MARK: - Language
+
+    private var languageSection: some View {
+        Section {
+            Button {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            } label: {
+                HStack {
+                    Image(systemName: "globe")
+                    Text("Language")
+                    Spacer()
+                    Text(Locale.current.localizedString(forLanguageCode: Bundle.main.preferredLocalizations.first ?? "en")?.capitalized ?? "")
+                        .foregroundStyle(Color.mistGray)
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(Color.mistGray)
+                }
+                .foregroundStyle(.white)
+            }
+        }
+        .listRowBackground(Color.slateTeal)
     }
 
     // MARK: - About
@@ -127,26 +157,48 @@ struct SettingsView: View {
         Section {
             LabeledContent("App name") {
                 Text("AquaTrail")
-                    .foregroundStyle(.white.opacity(0.7))
+                    .foregroundStyle(Color.mistGray)
             }
             .foregroundStyle(.white)
 
             LabeledContent("Version") {
                 Text(appVersion)
-                    .foregroundStyle(.white.opacity(0.7))
+                    .foregroundStyle(Color.mistGray)
             }
             .foregroundStyle(.white)
 
-            LabeledContent("Author") {
-                Text("Petrovych Nataliia")
-                    .foregroundStyle(.white.opacity(0.7))
-            }
-            .foregroundStyle(.white)
         } header: {
             Text("About")
                 .foregroundStyle(Color.skyLight)
         }
-        .listRowBackground(Color.deepTeal.opacity(0.5))
+        .listRowBackground(Color.slateTeal)
+    }
+
+    // MARK: - Share & Rate
+
+    private let appURL = URL(string: "https://apps.apple.com/app/aquatrail/id0000000000")!
+
+    private var shareSection: some View {
+        Section {
+            Button {
+                requestReview()
+            } label: {
+                HStack {
+                    Image(systemName: "star.fill")
+                    Text("Rate the app")
+                }
+                .foregroundStyle(Color.skyLight)
+            }
+
+            ShareLink(item: appURL) {
+                HStack {
+                    Image(systemName: "square.and.arrow.up")
+                    Text("Share AquaTrail")
+                }
+                .foregroundStyle(.white)
+            }
+        }
+        .listRowBackground(Color.slateTeal)
     }
 
     // MARK: - Auth
@@ -161,7 +213,7 @@ struct SettingsView: View {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
                         Text("Sign out")
                     }
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Color.coralAccent)
                 }
             } else {
                 Button {
@@ -175,7 +227,7 @@ struct SettingsView: View {
                 }
             }
         }
-        .listRowBackground(Color.deepTeal.opacity(0.5))
+        .listRowBackground(Color.slateTeal)
     }
 
     // MARK: - Delete
@@ -197,7 +249,7 @@ struct SettingsView: View {
             }
             .disabled(vm.isDeleting)
         }
-        .listRowBackground(Color.deepTeal.opacity(0.5))
+        .listRowBackground(Color.slateTeal)
     }
 }
 

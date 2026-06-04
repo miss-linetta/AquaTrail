@@ -17,6 +17,7 @@ struct ProfileView: View {
 
     private let certifications = ["CMAS 1*", "CMAS 2*", "CMAS 3*", "OWD", "AOWD", "Rescue Diver"]
 
+    var showCloseButton = false
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -39,10 +40,12 @@ struct ProfileView: View {
         .navigationBarTitleDisplayMode(.large)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button { dismiss() } label: {
-                    Image(systemName: "xmark")
-                        .foregroundStyle(.white)
+            if showCloseButton {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button { dismiss() } label: {
+                        Image(systemName: "xmark")
+                            .foregroundStyle(.white)
+                    }
                 }
             }
         }
