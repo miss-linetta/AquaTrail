@@ -784,6 +784,9 @@
         }
       }
     },
+    "Dive deeper. Explore more." : {
+
+    },
     "Dive Log" : {
       "localizations" : {
         "uk" : {
@@ -1507,6 +1510,7 @@
       }
     },
     "Number of dives" : {
+      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {

@@ -13,19 +13,21 @@ class LocationManager: NSObject {
     var userLocation: CLLocation?
 
     private let manager = CLLocationManager()
+    private var hasReceivedLocation = false
 
     override init() {
         super.init()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
     }
 
     func requestLocation() {
+        hasReceivedLocation = false
         switch manager.authorizationStatus {
         case .notDetermined:
             manager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse, .authorizedAlways:
-            manager.requestLocation()
+            manager.startUpdatingLocation()
         default:
             break
         }
@@ -34,8 +36,11 @@ class LocationManager: NSObject {
 
 extension LocationManager: CLLocationManagerDelegate {
     nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.first else { return }
+        guard let location = locations.last else { return }
         Task { @MainActor in
+            guard !self.hasReceivedLocation else { return }
+            self.hasReceivedLocation = true
+            manager.stopUpdatingLocation()
             self.userLocation = location
             do {
                 let placemarks = try await CLGeocoder().reverseGeocodeLocation(location)
@@ -53,7 +58,7 @@ extension LocationManager: CLLocationManagerDelegate {
             #if os(iOS)
             let status = manager.authorizationStatus
             if status == .authorizedWhenInUse || status == .authorizedAlways {
-                manager.requestLocation()
+                manager.startUpdatingLocation()
             }
             #endif
         }

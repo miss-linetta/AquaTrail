@@ -177,8 +177,7 @@ struct ProfileView: View {
                 }
             }
 
-            field(title: "Number of dives", text: $vm.totalDives, placeholder: "0")
-                .keyboardType(.numberPad)
+
 
             // Interests
             VStack(alignment: .leading, spacing: 6) {
@@ -186,7 +185,7 @@ struct ProfileView: View {
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.7))
 
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 90))], spacing: 8) {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
                     ForEach(ProfileViewModel.allInterests, id: \.self) { interest in
                         let selected = vm.selectedInterests.contains(interest)
                         Button {
@@ -369,6 +368,5 @@ struct ProfileView: View {
                 .background(Color.red.opacity(0.4))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
         }
-        .padding(.top, 8)
     }
 }
